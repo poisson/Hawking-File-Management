@@ -10,12 +10,13 @@ ALLFILES := $(CPPSRCFILES) $(CPPHDRFILES) $(AUXFILES)
 
 CPPFLAGS := -g -Wall -Wextra 
 INCLUDES := -I./include
+LIBS := -lmagic
 
 all: hawking
 
 hawking: $(CPPOBJFILES)
 
-	g++ $(CPPFLAGS) $(INCLUDES) -o hawking $(CPPOBJFILES)
+	g++ $(CPPFLAGS) $(INCLUDES) -o hawking $(CPPOBJFILES) $(LIBS)
 
 %.o: %.cpp Makefile
 	g++ $(CPPFLAGS) $(INCLUDES) -o $@ -c $<

@@ -21,9 +21,10 @@ bool scanDir(const std::string& pathname)
         while ((pent = readdir(pdir)))
         {
     	    if (pent->d_name[0] == '.') continue;
-	    std::cout << pent->d_name << '\n';
+	    std::cout << pent->d_name << ": ";
 	    std::string newpath(pent->d_name);
 	    newpath = currentdir + "/" + newpath;
+	    std::cout << fileType(newpath) << '\n';
 	    if (isDir(newpath)) 
 	    {
 	        directories.push_back(newpath);
@@ -31,8 +32,7 @@ bool scanDir(const std::string& pathname)
         }
         if (errno)
         { 
-            std::cout << strerror(errno) << '\n';
-            std::cerr << "Problems reading directory - check permissions." << std::endl;
+            std::cerr << "Problems reading directory - check permissions: " << strerror(errno) << std::endl;
             closedir(pdir);
 	    errno = 0;
             return false;
@@ -47,4 +47,21 @@ bool isDir(const std::string& pathname)
     struct stat fileinfo;
     lstat(pathname.c_str(), &fileinfo);
     return (S_ISDIR(fileinfo.st_mode));
+}
+
+std::string fileType(const std::string& pathname)
+{
+    magic_t cookie;
+    std::string filetype;
+    cookie = magic_open(MAGIC_NONE);
+    if (cookie == NULL || magic_load(cookie, NULL) != 0)
+    {
+	std::cerr << "Error initializing libmagic: " << magic_error(cookie) << std::endl;
+	magic_close(cookie);
+	return "";
+    }
+    filetype = magic_file(cookie, pathname.c_str());
+    errno = 0;
+    magic_close(cookie);
+    return filetype;
 }

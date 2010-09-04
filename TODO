@@ -1,0 +1,1 @@
+Repair error checking in the fileType function (errno is too global, magic_file setting errno=2)
