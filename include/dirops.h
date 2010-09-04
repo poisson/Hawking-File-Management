@@ -1,5 +1,5 @@
-#ifndef __SCANDIR_H__
-#define __SCANDIR_H__
+#ifndef __DIROPS_H__
+#define __DIROPS_H__
 
 #include <string.h>
 #include <cstring>
@@ -11,5 +11,6 @@
 #include <vector>
 
 bool scanDir(const std::string& pathname);
+bool isDir(const std::string& pathname);
 
 #endif

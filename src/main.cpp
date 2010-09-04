@@ -1,5 +1,4 @@
-#include <dirent.h>
-#include "scandir.h"
+#include "dirops.h"
 #include <iostream>
 
 int main (int argc, char** argv)

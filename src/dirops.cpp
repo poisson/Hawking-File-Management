@@ -1,10 +1,9 @@
-#include "scandir.h"
+#include "dirops.h"
 
 bool scanDir(const std::string& pathname)
 {
     DIR* pdir;
     struct dirent* pent;
-    struct stat fileinfo;
     std::vector<std::string> directories;
     std::string currentdir;
     directories.push_back(pathname);
@@ -25,8 +24,7 @@ bool scanDir(const std::string& pathname)
 	    std::cout << pent->d_name << '\n';
 	    std::string newpath(pent->d_name);
 	    newpath = currentdir + "/" + newpath;
-	    lstat(newpath.c_str(), &fileinfo);
-	    if (S_ISDIR(fileinfo.st_mode)) 
+	    if (isDir(newpath)) 
 	    {
 	        directories.push_back(newpath);
 	    }
@@ -42,4 +40,11 @@ bool scanDir(const std::string& pathname)
         closedir(pdir);
     }
     return true;
+}
+
+bool isDir(const std::string& pathname)
+{
+    struct stat fileinfo;
+    lstat(pathname.c_str(), &fileinfo);
+    return (S_ISDIR(fileinfo.st_mode));
 }
